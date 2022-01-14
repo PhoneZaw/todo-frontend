@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, ToastAndroid} from 'react-native';
 import Button from '../utils/Button';
 import {Input} from '../utils/Input';
 
-const SignUp = ({setToken, navigation}) => {
+const SignUp = ({navigation}) => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const user = async () => {
     try {
       const response = await fetch(
-        'http://192.168.8.121:3000/api/v1/users/signup',
+        'https://todoapibypz.herokuapp.com/api/v1/users/signup',
         {
           method: 'POST',
           headers: {
@@ -53,11 +53,17 @@ const SignUp = ({setToken, navigation}) => {
       <Text style={styles.text}>Sign Up</Text>
       <View style={styles.container2}>
         <Input text="Username" value={name} handleTitle={setName} />
-        <Input text="Password" value={password} handleTitle={setPassword} />
+        <Input
+          text="Password"
+          value={password}
+          handleTitle={setPassword}
+          isVisable={false}
+        />
         <Input
           text="Confirm Password"
           value={confirmPassword}
           handleTitle={setConfirmPassword}
+          isVisable={false}
         />
         <Button text="Sign Up" onPress={handleSignUp} />
       </View>

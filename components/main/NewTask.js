@@ -6,6 +6,7 @@ import Header from './utils/Header';
 
 const NewTask = props => {
   const {id, token} = props.route.params;
+  console.log(id);
   const [title, setTitle] = useState('');
   const [date, setDate] = useState(new Date());
   const [desc, setDesc] = useState('');
@@ -13,7 +14,7 @@ const NewTask = props => {
   const addTodo = async () => {
     try {
       const res = await fetch(
-        `http://192.168.8.121:3000/api/v1/users/${id}/todos`,
+        `https://todoapibypz.herokuapp.com/api/v1/users/${id}/todos`,
         {
           method: 'POST',
           headers: {
@@ -44,7 +45,7 @@ const NewTask = props => {
       <Header
         text="New Task"
         handleCancel={() => props.navigation.goBack()}
-        handleDone={() => props.navigation.navigate('AllTasks')}
+        handleDone={handleSave}
       />
       <Input text="Title" value={title} handleTitle={setTitle} />
       <DateInput text="Date" value={date} handleDate={setDate} />

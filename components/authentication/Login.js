@@ -2,14 +2,16 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet, ToastAndroid} from 'react-native';
 import Button from '../utils/Button';
 import {Input} from '../utils/Input';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Login = ({navigation}) => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [isPasswordVisable, setIsPasswordVisable] = useState(false);
   const user = async () => {
     try {
       const response = await fetch(
-        'http://192.168.8.121:3000/api/v1/users/login',
+        'https://todoapibypz.herokuapp.com/api/v1/users/login',
         {
           method: 'POST',
           headers: {
@@ -51,10 +53,22 @@ const Login = ({navigation}) => {
       <Text style={styles.text}>Sign In to continue</Text>
       <View style={styles.container2}>
         <Input text="Username" value={name} handleTitle={setName} />
-        <Input text="Password" value={password} handleTitle={setPassword} />
+        <Input
+          text="Password"
+          value={password}
+          handleTitle={setPassword}
+          isVisable={isPasswordVisable}
+        />
+        <Icon
+          style={styles.passwordIcon}
+          name={isPasswordVisable ? 'eye' : 'eye-slash'}
+          size={25}
+          color="#111"
+          onPress={() => setIsPasswordVisable(!isPasswordVisable)}
+        />
         <Button text="Login" onPress={handleLogin} />
         <Text style={styles.text2}>
-          Don't have an account
+          Don't have an account{' '}
           <Text
             style={styles.linkColor}
             onPress={() => navigation.navigate('SignUp')}>
@@ -89,6 +103,11 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   linkColor: {color: '#f88124'},
+  passwordIcon: {
+    position: 'relative',
+    top: -48,
+    right: -120,
+  },
 });
 
 export default Login;

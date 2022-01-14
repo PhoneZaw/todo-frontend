@@ -20,6 +20,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     margin: 10,
+    shadowOffset: {
+      width: 20,
+      height: 20,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 15,
   },
   text: {
     fontSize: 20,

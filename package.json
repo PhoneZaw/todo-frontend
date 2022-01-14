@@ -12,6 +12,8 @@
   "dependencies": {
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
+    "abort-controller": "^3.0.0",
+    "native-abort-controller": "^1.0.4",
     "react": "17.0.2",
     "react-native": "0.66.4",
     "react-native-date-picker": "^4.1.3",

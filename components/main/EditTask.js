@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Button from '../utils/Button';
 import {Input, MultilineInput, DateInput} from '../utils/Input';
@@ -13,7 +13,7 @@ const EditTask = props => {
   const updateTodo = async () => {
     try {
       const res = await fetch(
-        `http://192.168.8.121:3000/api/v1/users/${id}/todos/${todo._id}`,
+        `https://todoapibypz.herokuapp.com/api/v1/users/${id}/todos/${todo._id}`,
         {
           method: 'PATCH',
           headers: {

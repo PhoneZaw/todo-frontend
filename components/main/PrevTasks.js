@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import Header from './utils/Header';
 import Task from './utils/Task';
 
@@ -13,7 +13,7 @@ const PrevTasks = ({navigation, route}) => {
   const updateTodo = async todo => {
     try {
       const res = await fetch(
-        `http://192.168.8.121:3000/api/v1/users/${id}/todos/${todo._id}`,
+        `https://todoapibypz.herokuapp.com/api/v1/users/${id}/todos/${todo._id}`,
         {
           method: 'PATCH',
           headers: {
@@ -38,7 +38,7 @@ const PrevTasks = ({navigation, route}) => {
   const getTasks = async () => {
     try {
       const res = await fetch(
-        `http://192.168.8.121:3000/api/v1/users/${id}/todos`,
+        `https://todoapibypz.herokuapp.com/api/v1/users/${id}/todos`,
         {
           method: 'GET',
           headers: {
@@ -75,38 +75,44 @@ const PrevTasks = ({navigation, route}) => {
         <View style={styles.verticalDivider} />
         <Text style={[styles.barText, styles.barTextUnderline]}>Prev Task</Text>
       </View>
-      <View style={styles.itemContainer}>
-        {todos.map(todo => {
-          return (
-            <Task
-              key={todo._id}
-              desc={todo.desc ? todo.desc : desc}
-              title={todo.title}
-              date={todo.date}
-              isChecked={todo.completed}
-              onPressCircle={() => {
-                updateTodo(todo);
-              }}
-              onPress={() =>
-                navigation.navigate('PrevTask', {
-                  todo,
-                  id,
-                  token,
-                })
-              }
-            />
-          );
-        })}
-      </View>
+      <ScrollView style={styles.scroll}>
+        <View style={styles.itemContainer}>
+          {todos.map(todo => {
+            return (
+              <Task
+                key={todo._id}
+                desc={todo.desc ? todo.desc : desc}
+                title={todo.title}
+                date={todo.date}
+                isChecked={todo.completed}
+                onPressCircle={() => {
+                  updateTodo(todo);
+                }}
+                onPress={() =>
+                  navigation.navigate('PrevTask', {
+                    todo,
+                    id,
+                    token,
+                  })
+                }
+              />
+            );
+          })}
+        </View>
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#fff',
     flex: 1,
     width: '100%',
     alignItems: 'center',
+  },
+  scroll: {
+    width: '100%',
   },
   itemContainer: {
     width: '100%',

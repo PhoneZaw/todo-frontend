@@ -1,17 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import Header from './utils/Header';
 import AddTask from './utils/AddTask';
 import Task from './utils/Task';
+import {AbortController} from 'native-abort-controller';
 
 const AllTasks = ({navigation, route}) => {
   const {id, token} = route.params;
   const [todos, setTodos] = useState([]);
 
+  const abortCont = new AbortController();
+
   const updateTodo = async todo => {
     try {
       const res = await fetch(
-        `http://192.168.8.121:3000/api/v1/users/${id}/todos/${todo._id}`,
+        `https://todoapibypz.herokuapp.com/api/v1/users/${id}/todos/${todo._id}`,
         {
           method: 'PATCH',
           headers: {
@@ -24,6 +27,7 @@ const AllTasks = ({navigation, route}) => {
             date: todo.date,
             completed: !todo.completed,
           }),
+          signal: abortCont.signal,
         },
       );
       const data = await res.json();
@@ -36,16 +40,18 @@ const AllTasks = ({navigation, route}) => {
   const getTasks = async () => {
     try {
       const res = await fetch(
-        `http://192.168.8.121:3000/api/v1/users/${id}/todos`,
+        `https://todoapibypz.herokuapp.com/api/v1/users/${id}/todos`,
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             authorization: `Bearer ${token}`,
           },
+          signal: abortCont.signal,
         },
       );
       const data = await res.json();
+      console.log('loop');
       setTodos(data.data.todos.filter(todo => !todo.completed));
     } catch (err) {
       console.log(err);
@@ -53,14 +59,10 @@ const AllTasks = ({navigation, route}) => {
   };
 
   useEffect(() => {
-    if (!id) {
-      console.log('no id');
-      return;
-    }
     getTasks();
     return () => {};
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getTasks]);
+  }, [todos]);
 
   return (
     <View style={styles.container}>
@@ -74,40 +76,47 @@ const AllTasks = ({navigation, route}) => {
           Prev Task
         </Text>
       </View>
-      <View style={styles.itemContainer}>
-        <AddTask onPress={() => navigation.navigate('NewTask', {id, token})} />
-
-        {todos.map(todo => {
-          return (
-            <Task
-              key={todo._id}
-              desc={todo.desc}
-              title={todo.title}
-              date={todo.date}
-              isChecked={todo.completed}
-              onPressCircle={() => {
-                updateTodo(todo);
-              }}
-              onPress={() =>
-                navigation.navigate('EditTask', {
-                  todo,
-                  id,
-                  token,
-                })
-              }
-            />
-          );
-        })}
-      </View>
+      <ScrollView style={styles.scroll}>
+        <View style={styles.itemContainer}>
+          <AddTask
+            onPress={() => navigation.navigate('NewTask', {id, token})}
+          />
+          {todos.map(todo => {
+            return (
+              <Task
+                key={todo._id}
+                desc={todo.desc}
+                title={todo.title}
+                date={todo.date}
+                isChecked={todo.completed}
+                onPressCircle={() => {
+                  updateTodo(todo);
+                }}
+                onPress={() =>
+                  navigation.navigate('EditTask', {
+                    todo,
+                    id,
+                    token,
+                  })
+                }
+              />
+            );
+          })}
+        </View>
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#fff',
     flex: 1,
     width: '100%',
     alignItems: 'center',
+  },
+  scroll: {
+    width: '100%',
   },
   itemContainer: {
     width: '100%',

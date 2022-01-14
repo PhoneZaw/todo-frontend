@@ -2,7 +2,13 @@ import React, {useState, useEffect} from 'react';
 import {TextInput, StyleSheet, View, Text} from 'react-native';
 import DatePicker from 'react-native-date-picker';
 
-export const Input = ({text, value, handleTitle, disabled = false}) => {
+export const Input = ({
+  text,
+  value,
+  handleTitle,
+  disabled = false,
+  isVisable = true,
+}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{text}</Text>
@@ -14,12 +20,13 @@ export const Input = ({text, value, handleTitle, disabled = false}) => {
         onChangeText={handleTitle}
         // {disabled && (editable={false} selectTextOnFocus={false})}
         editable={!disabled}
+        secureTextEntry={!isVisable}
       />
     </View>
   );
 };
 
-export const MultilineInput = ({text, value, handleDesc, disabled = true}) => {
+export const MultilineInput = ({text, value, handleDesc, disabled = false}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{text}</Text>
@@ -40,7 +47,7 @@ export const MultilineInput = ({text, value, handleDesc, disabled = true}) => {
   );
 };
 
-export const DateInput = ({text, value, disabled = true}) => {
+export const DateInput = ({text, value, disabled = false}) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
 
