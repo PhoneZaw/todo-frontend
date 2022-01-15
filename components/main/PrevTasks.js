@@ -61,10 +61,6 @@ const PrevTasks = ({navigation, route}) => {
 
   useEffect(() => {
     getTasks();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     return () => {
       abortCont.abort();
     };

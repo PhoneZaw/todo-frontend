@@ -8,7 +8,7 @@ import HideKeyboard from '../utils/HideKeyboard';
 const PrevTask = props => {
   const {todo, id, token} = props.route.params;
   const [title, setTitle] = useState(todo.title);
-  const [date, setDate] = useState(todo.date);
+  const [date, setDate] = useState(new Date(todo.date));
   const [desc, setDesc] = useState(todo.desc);
 
   const deleteTodo = async () => {
@@ -23,8 +23,7 @@ const PrevTask = props => {
           },
         },
       );
-      const data = await res.json();
-      console.log(data);
+      await res.json();
     } catch (err) {
       console.log(err);
     }
