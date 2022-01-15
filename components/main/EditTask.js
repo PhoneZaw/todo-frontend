@@ -3,6 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import Button from '../utils/Button';
 import {Input, MultilineInput, DateInput} from '../utils/Input';
 import Header from './utils/Header';
+import HideKeyboard from '../utils/HideKeyboard';
 
 const EditTask = props => {
   const {todo, id, token} = props.route.params;
@@ -41,18 +42,20 @@ const EditTask = props => {
   };
 
   return (
-    <View style={styles.container}>
-      <Header
-        text="Edit Task"
-        handleCancel={() => props.navigation.goBack()}
-        handleDone={handleSave}
-      />
-      <Input text="Title" value={title} handleTitle={setTitle} />
-      <DateInput text="Date" value={date} handleDate={setDate} />
-      <MultilineInput text="Description" value={desc} handleDesc={setDesc} />
-      <Text style={styles.smallText}>Make as done</Text>
-      <Button text="Save" onPress={handleSave} />
-    </View>
+    <HideKeyboard>
+      <View style={styles.container}>
+        <Header
+          text="Edit Task"
+          handleCancel={() => props.navigation.goBack()}
+          handleDone={handleSave}
+        />
+        <Input text="Title" value={title} handleTitle={setTitle} />
+        <DateInput text="Date" value={date} handleDate={setDate} />
+        <MultilineInput text="Description" value={desc} handleDesc={setDesc} />
+        <Text style={styles.smallText}>Make as done</Text>
+        <Button text="Save" onPress={handleSave} />
+      </View>
+    </HideKeyboard>
   );
 };
 

@@ -3,6 +3,7 @@ import {View, StyleSheet} from 'react-native';
 import Button from '../utils/Button';
 import {Input, MultilineInput, DateInput} from '../utils/Input';
 import Header from './utils/Header';
+import HideKeyboard from '../utils/HideKeyboard';
 
 const NewTask = props => {
   const {id, token} = props.route.params;
@@ -41,17 +42,19 @@ const NewTask = props => {
   };
 
   return (
-    <View style={styles.container}>
-      <Header
-        text="New Task"
-        handleCancel={() => props.navigation.goBack()}
-        handleDone={handleSave}
-      />
-      <Input text="Title" value={title} handleTitle={setTitle} />
-      <DateInput text="Date" value={date} handleDate={setDate} />
-      <MultilineInput text="Description" value={desc} handleDesc={setDesc} />
-      <Button text="Save" onPress={handleSave} />
-    </View>
+    <HideKeyboard>
+      <View style={styles.container}>
+        <Header
+          text="New Task"
+          handleCancel={() => props.navigation.goBack()}
+          handleDone={handleSave}
+        />
+        <Input text="Title" value={title} handleTitle={setTitle} />
+        <DateInput text="Date" value={date} handleDate={setDate} />
+        <MultilineInput text="Description" value={desc} handleDesc={setDesc} />
+        <Button text="Save" onPress={handleSave} />
+      </View>
+    </HideKeyboard>
   );
 };
 

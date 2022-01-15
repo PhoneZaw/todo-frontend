@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet, ToastAndroid} from 'react-native';
 import Button from '../utils/Button';
 import {Input} from '../utils/Input';
+import HideKeyboard from '../utils/HideKeyboard';
 
 const SignUp = ({navigation}) => {
   const [name, setName] = useState('');
@@ -49,25 +50,27 @@ const SignUp = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Sign Up</Text>
-      <View style={styles.container2}>
-        <Input text="Username" value={name} handleTitle={setName} />
-        <Input
-          text="Password"
-          value={password}
-          handleTitle={setPassword}
-          isVisable={false}
-        />
-        <Input
-          text="Confirm Password"
-          value={confirmPassword}
-          handleTitle={setConfirmPassword}
-          isVisable={false}
-        />
-        <Button text="Sign Up" onPress={handleSignUp} />
+    <HideKeyboard>
+      <View style={styles.container}>
+        <Text style={styles.text}>Sign Up</Text>
+        <View style={styles.container2}>
+          <Input text="Username" value={name} handleTitle={setName} />
+          <Input
+            text="Password"
+            value={password}
+            handleTitle={setPassword}
+            isVisable={false}
+          />
+          <Input
+            text="Confirm Password"
+            value={confirmPassword}
+            handleTitle={setConfirmPassword}
+            isVisable={false}
+          />
+          <Button text="Sign Up" onPress={handleSignUp} />
+        </View>
       </View>
-    </View>
+    </HideKeyboard>
   );
 };
 

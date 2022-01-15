@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import Header from './utils/Header';
 import Task from './utils/Task';
+import {AbortController} from 'native-abort-controller';
 
 const desc =
   'loremipsum This is a text this is a textloremipsum This is a text thisis a text loremipsum This is a text this is a text loremipsum This is atext this is a text';
@@ -9,6 +10,8 @@ const desc =
 const PrevTasks = ({navigation, route}) => {
   const {id, token} = route.params;
   const [todos, setTodos] = useState([]);
+
+  const abortCont = new AbortController();
 
   const updateTodo = async todo => {
     try {
@@ -30,6 +33,7 @@ const PrevTasks = ({navigation, route}) => {
       );
       const data = await res.json();
       console.log(data);
+      getTasks();
     } catch (err) {
       console.log(err);
     }
@@ -45,6 +49,7 @@ const PrevTasks = ({navigation, route}) => {
             'Content-Type': 'application/json',
             authorization: `Bearer ${token}`,
           },
+          signal: abortCont.signal,
         },
       );
       const data = await res.json();
@@ -55,13 +60,16 @@ const PrevTasks = ({navigation, route}) => {
   };
 
   useEffect(() => {
-    if (!id) {
-      console.log('no id');
-      return;
-    }
     getTasks();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getTasks]);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      abortCont.abort();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [todos]);
 
   return (
     <View style={styles.container}>

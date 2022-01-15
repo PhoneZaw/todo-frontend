@@ -3,6 +3,7 @@ import {View, Text, StyleSheet} from 'react-native';
 import Button from '../utils/Button';
 import {Input, MultilineInput, DateInput} from '../utils/Input';
 import Header from './utils/Header';
+import HideKeyboard from '../utils/HideKeyboard';
 
 const PrevTask = props => {
   const {todo, id, token} = props.route.params;
@@ -35,23 +36,25 @@ const PrevTask = props => {
   };
 
   return (
-    <View style={styles.container}>
-      <Header
-        text="Edit Task"
-        handleCancel={() => props.navigation.goBack()}
-        handleDone={() => props.navigation.navigate('PrevTasks', {id, token})}
-      />
-      <Input text="Title" value={title} handleTitle={setTitle} disabled />
-      <DateInput text="Date" value={date} handleDate={setDate} disabled />
-      <MultilineInput
-        text="Description"
-        value={desc}
-        handleDesc={setDesc}
-        disabled
-      />
-      <Text style={styles.smallText}>Restore Task</Text>
-      <Button text="Delete" onPress={handleDelete} />
-    </View>
+    <HideKeyboard>
+      <View style={styles.container}>
+        <Header
+          text="Edit Task"
+          handleCancel={() => props.navigation.goBack()}
+          handleDone={() => props.navigation.navigate('PrevTasks', {id, token})}
+        />
+        <Input text="Title" value={title} handleTitle={setTitle} disabled />
+        <DateInput text="Date" value={date} handleDate={setDate} disabled />
+        <MultilineInput
+          text="Description"
+          value={desc}
+          handleDesc={setDesc}
+          disabled
+        />
+        <Text style={styles.smallText}>Restore Task</Text>
+        <Button text="Delete" onPress={handleDelete} />
+      </View>
+    </HideKeyboard>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {RefreshControl, View, Text, StyleSheet, ScrollView} from 'react-native';
 import Header from './utils/Header';
 import AddTask from './utils/AddTask';
 import Task from './utils/Task';
@@ -8,6 +8,13 @@ import {AbortController} from 'native-abort-controller';
 const AllTasks = ({navigation, route}) => {
   const {id, token} = route.params;
   const [todos, setTodos] = useState([]);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getTasks();
+    setRefreshing(false);
+  };
 
   const abortCont = new AbortController();
 
@@ -32,6 +39,7 @@ const AllTasks = ({navigation, route}) => {
       );
       const data = await res.json();
       console.log(data);
+      getTasks();
     } catch (err) {
       console.log(err);
     }
@@ -51,7 +59,7 @@ const AllTasks = ({navigation, route}) => {
         },
       );
       const data = await res.json();
-      console.log('loop');
+      console.log(data);
       setTodos(data.data.todos.filter(todo => !todo.completed));
     } catch (err) {
       console.log(err);
@@ -60,7 +68,13 @@ const AllTasks = ({navigation, route}) => {
 
   useEffect(() => {
     getTasks();
-    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      abortCont.abort();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [todos]);
 
@@ -76,32 +90,40 @@ const AllTasks = ({navigation, route}) => {
           Prev Task
         </Text>
       </View>
-      <ScrollView style={styles.scroll}>
+      <ScrollView
+        style={styles.scroll}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         <View style={styles.itemContainer}>
           <AddTask
             onPress={() => navigation.navigate('NewTask', {id, token})}
           />
-          {todos.map(todo => {
-            return (
-              <Task
-                key={todo._id}
-                desc={todo.desc}
-                title={todo.title}
-                date={todo.date}
-                isChecked={todo.completed}
-                onPressCircle={() => {
-                  updateTodo(todo);
-                }}
-                onPress={() =>
-                  navigation.navigate('EditTask', {
-                    todo,
-                    id,
-                    token,
-                  })
-                }
-              />
-            );
-          })}
+          {todos ? (
+            todos.map(todo => {
+              return (
+                <Task
+                  key={todo._id}
+                  desc={todo.desc}
+                  title={todo.title}
+                  date={todo.date}
+                  isChecked={todo.completed}
+                  onPressCircle={() => {
+                    updateTodo(todo);
+                  }}
+                  onPress={() =>
+                    navigation.navigate('EditTask', {
+                      todo,
+                      id,
+                      token,
+                    })
+                  }
+                />
+              );
+            })
+          ) : (
+            <Text> Loading </Text>
+          )}
         </View>
       </ScrollView>
     </View>

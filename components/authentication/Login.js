@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, ToastAndroid} from 'react-native';
 import Button from '../utils/Button';
 import {Input} from '../utils/Input';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import HideKeyboard from '../utils/HideKeyboard';
 
 const Login = ({navigation}) => {
   const [name, setName] = useState('');
@@ -25,6 +26,7 @@ const Login = ({navigation}) => {
         },
       );
       const data = await response.json();
+      console.log(data);
       return data;
     } catch (err) {
       console.log(err);
@@ -33,7 +35,8 @@ const Login = ({navigation}) => {
 
   const handleLogin = async () => {
     const response = await user();
-    if (response.error) {
+    console.log(response);
+    if (response.status === 'fail') {
       ToastAndroid.show(response.message, ToastAndroid.SHORT);
       console.log(response.message);
       return;
@@ -48,35 +51,37 @@ const Login = ({navigation}) => {
     }
   };
   return (
-    <View style={styles.container}>
-      <Text style={styles.smallText}>Welcome Back</Text>
-      <Text style={styles.text}>Sign In to continue</Text>
-      <View style={styles.container2}>
-        <Input text="Username" value={name} handleTitle={setName} />
-        <Input
-          text="Password"
-          value={password}
-          handleTitle={setPassword}
-          isVisable={isPasswordVisable}
-        />
-        <Icon
-          style={styles.passwordIcon}
-          name={isPasswordVisable ? 'eye' : 'eye-slash'}
-          size={25}
-          color="#111"
-          onPress={() => setIsPasswordVisable(!isPasswordVisable)}
-        />
-        <Button text="Login" onPress={handleLogin} />
-        <Text style={styles.text2}>
-          Don't have an account{' '}
-          <Text
-            style={styles.linkColor}
-            onPress={() => navigation.navigate('SignUp')}>
-            Sign up
+    <HideKeyboard>
+      <View style={styles.container}>
+        <Text style={styles.smallText}>Welcome Back</Text>
+        <Text style={styles.text}>Sign In to continue</Text>
+        <View style={styles.container2}>
+          <Input text="Username" value={name} handleTitle={setName} />
+          <Input
+            text="Password"
+            value={password}
+            handleTitle={setPassword}
+            isVisable={isPasswordVisable}
+          />
+          <Icon
+            style={styles.passwordIcon}
+            name={isPasswordVisable ? 'eye' : 'eye-slash'}
+            size={25}
+            color="#111"
+            onPress={() => setIsPasswordVisable(!isPasswordVisable)}
+          />
+          <Button text="Login" onPress={handleLogin} />
+          <Text style={styles.text2}>
+            Don't have an account{' '}
+            <Text
+              style={styles.linkColor}
+              onPress={() => navigation.navigate('SignUp')}>
+              Sign up
+            </Text>
           </Text>
-        </Text>
+        </View>
       </View>
-    </View>
+    </HideKeyboard>
   );
 };
 
