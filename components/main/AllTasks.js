@@ -59,7 +59,6 @@ const AllTasks = ({navigation, route}) => {
         },
       );
       const data = await res.json();
-      console.log(data);
       setTodos(data.data.todos.filter(todo => !todo.completed));
     } catch (err) {
       console.log(err);
@@ -68,10 +67,6 @@ const AllTasks = ({navigation, route}) => {
 
   useEffect(() => {
     getTasks();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     return () => {
       abortCont.abort();
     };

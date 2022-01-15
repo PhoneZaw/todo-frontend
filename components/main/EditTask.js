@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Button from '../utils/Button';
 import {Input, MultilineInput, DateInput} from '../utils/Input';
@@ -8,11 +8,12 @@ import HideKeyboard from '../utils/HideKeyboard';
 const EditTask = props => {
   const {todo, id, token} = props.route.params;
   const [title, setTitle] = useState(todo.title);
-  const [date, setDate] = useState(todo.date);
-  const [desc, setDesc] = useState(todo.desc);
+  const [date, setDate] = useState(new Date(todo.date));
+  const [desc, setDesc] = useState(todo.desc || '');
 
   const updateTodo = async () => {
     try {
+      console.log(date);
       const res = await fetch(
         `https://todoapibypz.herokuapp.com/api/v1/users/${id}/todos/${todo._id}`,
         {
@@ -35,6 +36,10 @@ const EditTask = props => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    console.log(date);
+  });
 
   const handleSave = async () => {
     await updateTodo();

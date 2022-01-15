@@ -47,15 +47,8 @@ export const MultilineInput = ({text, value, handleDesc, disabled = false}) => {
   );
 };
 
-export const DateInput = ({text, value, disabled = false}) => {
-  const [date, setDate] = useState(new Date());
+export const DateInput = ({text, value, handleDate, disabled = false}) => {
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (value) {
-      setDate(new Date(value));
-    }
-  }, [setDate, value]);
 
   return (
     <View style={styles.container}>
@@ -66,15 +59,15 @@ export const DateInput = ({text, value, disabled = false}) => {
         onPress={() => {
           !disabled && setOpen(true);
         }}>
-        {date.toString().slice(0, -20)}
+        {value.toString().slice(0, -20)}
       </Text>
       <DatePicker
         modal
         open={open}
-        date={date}
+        date={value}
         onConfirm={dateIn => {
           setOpen(false);
-          setDate(dateIn);
+          handleDate(dateIn);
         }}
         onCancel={() => {
           setOpen(false);
